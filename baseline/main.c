@@ -179,7 +179,7 @@ int main(int argc, char **argv) {
     }
 
     hashToUint8(test,intTest);
-    const char *filename = "plaintext/sorted_dict";
+    const char *filename = "plaintext/mostcommon-10k";
 
     FILE *infile;
     if ((infile = fopen (filename, "r")) == NULL){
