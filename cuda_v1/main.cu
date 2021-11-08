@@ -55,44 +55,6 @@ void readPwdFromFile(FILE *infile, password **pwd, unsigned int *numLines){
 	//passwd = &pwd;
 }
 
-void writeToFile(word16 *md5Hash, unsigned int num, const char *filename){
-	FILE *outfile = NULL;
-	char *outFileName = NULL;
-
-	char *outDir = "md5text";
-	char *appendStr = "-md5";
-	char *inFileName = (char*)filename;
-	char *token = strsep(&inFileName, "/");
-	token = strsep(&inFileName, "/");
-	outFileName = malloc (strlen(outDir) + strlen(token) + strlen(appendStr) + 2);
-	if(outFileName){
-		outFileName[0] = '\0';
-		strcat(outFileName,outDir);
-		strcat(outFileName,"/");
-		strcat(outFileName,token);
-		strcat(outFileName,appendStr);
-	}
-
-	if ((outfile = fopen (outFileName, "w")) == NULL){
-		printf ("%s can't be opened for writing\n", outFileName);
-		exit(0);
-	}
-
-	unsigned int i=0;
-	uint8_t result[16];
-	while(i<num){
-		memcpy(result,md5Hash[i].word, 16);
-		unsigned int j=0;
-		while(j<16){
-			fprintf(outfile,"%02x", result[j]);
-			//printf("%02x", result[j]);
-			++j;
-		}
-		fprintf(outfile,"\n");
-		++i;
-	}
-}
-
 inline void printpwd(password *pwd){
     unsigned int i=0;
     char *str = pwd->word;
@@ -190,7 +152,7 @@ int main(int argc, char **argv){
         // Copy found to cuda
         int* cuda_found;
         cudaMalloc((void**)&cuda_found, sizeof(int));
-        cudaMemcpy(cuda_found, found, sizeof(int), cudaMemcpyHostToDevice);
+        cudaMemcpy(cuda_found, &found, sizeof(int), cudaMemcpyHostToDevice);
 
         // Allocate size
         dim3 DimBlock(1024,1,1);
@@ -198,10 +160,11 @@ int main(int argc, char **argv){
         if(num_pwd%1024) DimGrid.x ++;
 
         // Run kernel
-        mutate_and_check<<<DimGrid, DimBlock>>>(device_password_array, unsigned int num_pwd, int i, cuda_found);
+        mutate_and_check<<<DimGrid, DimBlock>>>(device_password_array, num_pwd, i, cuda_found);
+        // printf("Possible error: %s\n", cudaGetErrorString(cudaGetLastError()));
         cudaDeviceSynchronize();
 
-        cudaMemcpy(found, cuda_found, sizeof(int), cudaMemcpyDeviceToHost);
+        cudaMemcpy(&found, cuda_found, sizeof(int), cudaMemcpyDeviceToHost);
         cudaFree(cuda_found);
     }
     stopTime(&Dicttime);
@@ -209,24 +172,25 @@ int main(int argc, char **argv){
 
     if(!found){
         printf("Couldn't find the password with dictionary manipulation\n");
-        for(int i = 1; i <= 5; ++i){
+        for(unsigned int i = 1; !found && i <= 5; ++i){
             size_t search_space = pow(26, i);
-
+            // printf(">>>>>>>>>>>>>>>>Search space %d<<<<<<<<<<<<<<<\n", search_space);
             // Copy found to cuda
             int* cuda_found;
             cudaMalloc((void**)&cuda_found, sizeof(int));
-            cudaMemcpy(cuda_found, found, sizeof(int), cudaMemcpyHostToDevice);
+            cudaMemcpy(cuda_found, &found, sizeof(int), cudaMemcpyHostToDevice);
 
             // Allocate size
             dim3 DimBlock(1024,1,1);
             dim3 DimGrid(search_space/1024, 1, 1);
             if(search_space%1024) DimGrid.x ++;
-
+            
             // Run kernel
-            brute_force<<<DimGrid, DimBlock>>>(search_space, cuda_found);
+            brute_force<<<DimGrid, DimBlock>>>(i, cuda_found);
+            // printf("Possible error: %s\n", cudaGetErrorString(cudaGetLastError()));
             cudaDeviceSynchronize();
 
-            cudaMemcpy(found, cuda_found, sizeof(int), cudaMemcpyDeviceToHost);
+            cudaMemcpy(&found, cuda_found, sizeof(int), cudaMemcpyDeviceToHost);
             cudaFree(cuda_found);
         }
     }

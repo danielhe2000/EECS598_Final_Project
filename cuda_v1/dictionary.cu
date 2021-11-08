@@ -4,7 +4,7 @@ __constant__ password seq[20];
 __constant__ uint8_t target_hash[16];
 
 void init_dictionary_seq(){
-    cpu_seq = (password *)malloc(20*sizeof(password));
+    password *cpu_seq = (password *)malloc(20*sizeof(password));
 
     memcpy(cpu_seq[0].word,"123", 3); cpu_seq[0].length = 3;
     memcpy(cpu_seq[1].word,"1234", 4); cpu_seq[1].length = 4;
@@ -27,7 +27,7 @@ void init_dictionary_seq(){
     memcpy(cpu_seq[18].word,"9999", 4);   cpu_seq[18].length = 4;
     memcpy(cpu_seq[19].word, "3333", 4);   cpu_seq[19].length = 4;
 
-    cudaMemcpyToSymbol(seq, seq_cpu, sizeof(password)*20);  
+    cudaMemcpyToSymbol(seq, cpu_seq, sizeof(password)*20);  
     free(cpu_seq);
 }
 
@@ -62,7 +62,7 @@ __global__ void mutate_and_check(password *dict, unsigned int numwords, int muta
         /* Add one digit to end
          * iterator: z-2    */
         size_t len = new_pas.length;
-        new_pas.word[len] = '0' + z-2;
+        new_pas.word[len] = '0' + mutation_method-2;
         new_pas.length += 1;
     }
    /* Add sequence of numbers at end; e.g. 1234, 84, 1999 */
@@ -70,18 +70,18 @@ __global__ void mutate_and_check(password *dict, unsigned int numwords, int muta
         // 0 to 99
         // iterator: z-12
         size_t len = new_pas.length;
-        new_pas.word[len] = '0' + ((z-12)/10)%10;
-        new_pas.word[len+1] = '0' + (z-12)%10;
+        new_pas.word[len] = '0' + ((mutation_method-12)/10)%10;
+        new_pas.word[len+1] = '0' + (mutation_method-12)%10;
         new_pas.length += 2;
     }
     else if (mutation_method>=112 && mutation_method<=231){
         // 1900 to 2020
         // iterator: z + (1900-112)
         size_t len = new_pas.length;
-        new_pas.word[len] = '0' + ((z+1900-112)/1000)%10;
-        new_pas.word[len+1] = '0' + ((z+1900-112)/100)%10;
-        new_pas.word[len+2] = '0' + ((z+1900-112)/10)%10;
-        new_pas.word[len+3] = '0' + (z+1900-112)%10;
+        new_pas.word[len] = '0' + ((mutation_method+1900-112)/1000)%10;
+        new_pas.word[len+1] = '0' + ((mutation_method+1900-112)/100)%10;
+        new_pas.word[len+2] = '0' + ((mutation_method+1900-112)/10)%10;
+        new_pas.word[len+3] = '0' + (mutation_method+1900-112)%10;
         new_pas.length += 4;
     }
     else if (mutation_method>=232 && mutation_method<=251){
@@ -89,10 +89,10 @@ __global__ void mutate_and_check(password *dict, unsigned int numwords, int muta
         // iterator: z-232
         //sprintf(&temp,"%s",sequences[z-252]);
         size_t len = new_pas.length;
-        for(int i = 0; i < seq[z-232].length; ++i){
-            new_pas.word[len] + i = seq[z-232].word[i];
+        for(int i = 0; i < seq[mutation_method-232].length; ++i){
+            *(new_pas.word + len + i) = seq[mutation_method-232].word[i];
         }
-        new_pas.length = len + seq[z-232].length;
+        new_pas.length = len + seq[mutation_method-232].length;
     }
 
     word16 md5_hash;

@@ -50,7 +50,8 @@ __device__ uint32_t to_int32(const uint8_t *bytes){
         | ((uint32_t) bytes[3] << 24);
 }
 
-__device__ void md5(password *, uint8_t *digest){
+__device__ void md5(password *pwd, uint8_t *digest) {
+
     // These vars will contain the hash
     uint32_t h0, h1, h2, h3;
     uint32_t w[16];
@@ -67,11 +68,7 @@ __device__ void md5(password *, uint8_t *digest){
 
     msg[initial_len] = 0x80; // append the "1" bit; most significant bit is "first"
 
-    /*
-    for (offset = initial_len + 1; offset < new_len; offset++)
-        msg[offset] = 0; // append "0" bits
-    */
-
+    
     for (i = 0; i < 14; i++)
         w[i] = to_int32(msg + i*4);
     // append the len in bits at the end of the buffer.
