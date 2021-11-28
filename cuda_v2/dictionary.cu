@@ -120,6 +120,7 @@ __global__ void mutate_and_check(uint *dict, unsigned int numwords, int mutation
     }
     if(flag == 1){
         atomicAdd(found, 1);
+        // *found = 1;
         printf("\n!!!!PASSWORD FOUND!!!!\nPassword is: ");
         for(int i = 0; i < new_pas.length; ++i){
             printf("%c", new_pas.word[i]);
