@@ -7,10 +7,10 @@ void init_target_hash_brute_force(uint8_t* int_test){
 }
 
 __global__ void brute_force(unsigned int pas_length, int* found){
-    int index = blockIdx.x * blockDim.x + threadIdx.x;
+    size_t index = blockIdx.x * blockDim.x + threadIdx.x;
     // if(index >= (int) (pow(26, pas_length))) return;
     // printf("Index: %d\n", index);
-    // printf("Password length: %d\n", pas_length);
+    
     password new_pas;
     memset(&new_pas,0,sizeof(password));
     new_pas.length = pas_length;

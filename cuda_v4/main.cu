@@ -196,6 +196,8 @@ int main(int argc, char **argv){
     stopTime(&Dicttime);
     printf("Dictionary Calculation Time: %f s\n", elapsedTime(Dicttime));
 
+    delete [] streams;
+
     if(!found){
         printf("Couldn't find the password with dictionary manipulation\n");
         // total = 8353082582 = 26 + 26^2 + ... + 26^7
@@ -204,7 +206,7 @@ int main(int argc, char **argv){
 
         int num_streams = 996;
 
-        cudaStream_t * streams = new cudaStream_t[num_streams]; // init streams
+        streams = new cudaStream_t[num_streams]; // init streams
 
         int* cuda_found;
         cudaMalloc((void**)&cuda_found, sizeof(int));
@@ -239,6 +241,8 @@ int main(int argc, char **argv){
         }
 
         cudaFree(cuda_found);
+        delete [] streams;
+
     }
     if(!found){
         printf("Sorry. Couldn't find the password\n");
@@ -252,7 +256,6 @@ int main(int argc, char **argv){
     // Clean up
 	if(infile != NULL)	fclose (infile);
     cudaFree(device_password_array);
-    delete [] streams;
 
     return 0;
 }

@@ -1,7 +1,7 @@
 #ifndef __BRUT_FORC
 #define __BRUT_FORC
 
-#define MAX_LETTERS	5
+#define MAX_LETTERS	6
 #define NUM_LETTERS	26
 #include "md5.h"
 

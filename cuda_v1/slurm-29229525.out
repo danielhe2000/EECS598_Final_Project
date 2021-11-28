@@ -1,0 +1,20 @@
+Total Dictionary Words: 10000
+File read time: 0.102755 s
+Device Allocation time: 0.000585 s
+Dictionary Calculation Time: 0.011271 s
+Couldn't find the password with dictionary manipulation
+dim: 1024
+dim: 1024
+dim: 18432
+dim: 457728
+dim: 11881472
+dim: 308916224
+
+!!!!PASSWORD FOUND!!!!
+Password is: zyyzzz
+MD5 Calculation time: 0.132118 s
+Total Time: 0.235476 s
+
+real	0m0.838s
+user	0m0.092s
+sys	0m0.243s

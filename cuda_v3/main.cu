@@ -198,7 +198,7 @@ int main(int argc, char **argv){
 
     if(!found){
         printf("Couldn't find the password with dictionary manipulation\n");
-        for(unsigned int i = 1; !found && i <= 7; ++i){
+        for(unsigned int i = 1; !found && i <= MAX_LETTERS; ++i){
             // parallel this 
             size_t search_space = pow(26, i);
             // printf(">>>>>>>>>>>>>>>>Search space %d<<<<<<<<<<<<<<<\n", search_space);
