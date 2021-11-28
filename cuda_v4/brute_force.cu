@@ -13,13 +13,12 @@ __global__ void brute_force(size_t offset, int* found){
     // printf("Password length: %d\n", pas_length);
     password new_pas;
     memset(&new_pas,0,sizeof(password));
-    bool ctn = 1;
     
     for(int i = 0; i < MAX_LETTERS; ++i){
-        new_pas.word[i] = 'a' * ctn + (uint8_t) (index%NUM_LETTERS);
+        bool ctn = (index != 0);
+        new_pas.word[i] = 'a' * ctn + (index%NUM_LETTERS);
         new_pas.length += ctn;
         index /= NUM_LETTERS;
-        ctn = (index != 0);
     }
 
     word16 md5_hash;
@@ -35,7 +34,7 @@ __global__ void brute_force(size_t offset, int* found){
     }
     if(flag == 1){
         atomicAdd(found, 1);
-        printf("\n!!!!PASSWORD FOUND!!!!\nPassword is: ");
+        printf("\n!!!!BF PASSWORD FOUND!!!!\nPassword is: ");
         for(int i = 0; i < new_pas.length; ++i){
             printf("%c", new_pas.word[i]);
         }

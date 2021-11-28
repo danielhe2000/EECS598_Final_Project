@@ -223,7 +223,7 @@ int main(int argc, char **argv){
         for (int i = 0; i < num_streams; ++i) {
             brute_force<<<DimGrid, DimBlock, 0, streams[i]>>>(offset, cuda_found);
             offset += PARTITION;
-            printf("Possible error: %s\n", cudaGetErrorString(cudaGetLastError()));
+            // printf("Possible error: %s\n", cudaGetErrorString(cudaGetLastError()));
         }
 
         for (int i = 0; i < num_streams; ++i) {

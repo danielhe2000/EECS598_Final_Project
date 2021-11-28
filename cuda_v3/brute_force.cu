@@ -33,7 +33,7 @@ __global__ void brute_force(unsigned int pas_length, int* found){
     }
     if(flag == 1){
         atomicAdd(found, 1);
-        printf("\n!!!!PASSWORD FOUND!!!!\nPassword is: ");
+        printf("\n!!!!BF PASSWORD FOUND!!!!\nPassword is: ");
         for(int i = 0; i < new_pas.length; ++i){
             printf("%c", new_pas.word[i]);
         }
