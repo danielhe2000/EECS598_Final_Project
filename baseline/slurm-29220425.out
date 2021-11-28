@@ -1,0 +1,30 @@
+Total Dictionary Words: 10000
+File read time: 0.021861 s
+Host Allocation time: 0.000004 s
+Starting with dictionary manipulation.
+Dictionary Calculation Time: 0.568365 s
+Couldn't find the password with dictionary manipulation
+
+Starting with brute force.
+Calculating with a maximum length of 1
+Total number of words: 26
+
+Calculating with a maximum length of 2
+Total number of words: 676
+
+Calculating with a maximum length of 3
+Total number of words: 17576
+
+Calculating with a maximum length of 4
+Total number of words: 456976
+
+Calculating with a maximum length of 5
+Total number of words: 11881376
+
+Sorry. Couldn't find the password
+MD5 Calculation time: 3.480253 s
+Total Time: 3.502137 s
+
+real	0m3.535s
+user	0m3.472s
+sys	0m0.003s
