@@ -18,6 +18,7 @@ void readPwdFromFile(FILE *infile, password **pwd, unsigned int *numLines){
     rewind(infile);
 
     *pwd = (password*)malloc(numberOfLines*sizeof(password));
+    memset(*pwd, 0, numberOfLines*sizeof(password)); // reset memory
     if(*pwd == NULL){
         printf("\nERROR: Memory allocation did not complete successfully! Exiting.");
         exit(0);
@@ -174,7 +175,7 @@ int main(int argc, char **argv){
         if ((i+1) * BLOCKTHREADS > num_pwd) numwords = num_pwd%BLOCKTHREADS; 
         uint *pwd_data = (uint *) (device_password_array + i*BLOCKTHREADS);
         mutate_and_check<<<DimGrid, DimBlock, 0, streams[i]>>>(pwd_data, numwords, cuda_found);
-        printf("Possible error: %s\n", cudaGetErrorString(cudaGetLastError()));
+        // printf("Possible error: %s\n", cudaGetErrorString(cudaGetLastError()));
     }
 
     // iterate checking

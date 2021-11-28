@@ -18,6 +18,7 @@ void readPwdFromFile(FILE *infile, password **pwd, unsigned int *numLines){
     rewind(infile);
 
     *pwd = (password*)malloc(numberOfLines*sizeof(password));
+    memset(*pwd, 0, numberOfLines*sizeof(password));
     if(*pwd == NULL){
         printf("\nERROR: Memory allocation did not complete successfully! Exiting.");
         exit(0);
