@@ -204,9 +204,7 @@ int main(int argc, char **argv){
         // size_t num_streams = SEARCH_SPACE/PARTITION;
         // if (SEARCH_SPACE%PARTITION) num_streams++; // 996 streams
 
-        int num_streams = 996;
-
-        streams = new cudaStream_t[num_streams]; // init streams
+        int count = 996;
 
         int* cuda_found;
         cudaMalloc((void**)&cuda_found, sizeof(int));
@@ -216,33 +214,20 @@ int main(int argc, char **argv){
         dim3 DimBlock(1024, 1, 1);
         dim3 DimGrid(8192, 1, 1);
 
-        for (int i = 0; i < num_streams; ++i) {
-            cudaStreamCreate(&streams[i]);
-        }
-
         size_t offset = 0; // increment by PARTITION every iter
 
-        for (int i = 0; i < num_streams; ++i) {
-            brute_force<<<DimGrid, DimBlock, 0, streams[i]>>>(offset, cuda_found);
+        for (int i = 0; i < count; ++i) {
+            brute_force<<<DimGrid, DimBlock>>>(offset, cuda_found);
             offset += PARTITION;
             // printf("Possible error: %s\n", cudaGetErrorString(cudaGetLastError()));
-        }
-
-        for (int i = 0; i < num_streams; ++i) {
-            cudaStreamSynchronize(streams[i]);
+            cudaDeviceSynchronize();
             cudaMemcpy(&found, cuda_found, sizeof(int), cudaMemcpyDeviceToHost);
             if (found) {
-                for (; i < num_streams; ++i) {
-                    cudaStreamDestroy(streams[i]);
-                }
                 break;
             }
-            cudaStreamDestroy(streams[i]);
         }
 
         cudaFree(cuda_found);
-        delete [] streams;
-
     }
     if(!found){
         printf("Sorry. Couldn't find the password\n");
