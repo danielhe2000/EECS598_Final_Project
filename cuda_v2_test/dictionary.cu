@@ -45,7 +45,7 @@ __global__ void mutate_and_check(uint *dict, unsigned int numwords, int mutation
     for (int i = 0; i < 16; ++i) {
         int index = tid + i * BLOCKTHREADS;
         int s_index = index + index/16; // padding one word every 16 words
-        s_data[s_index] = dict[index + blockDim.x * blockIdx.x]; // each thread load 16 times
+        s_data[s_index] = dict[index + 16*blockDim.x * blockIdx.x]; // each thread load 16 times
     }
     __syncthreads();
 
