@@ -38,7 +38,7 @@ unsigned int brute_force(){
 }
 
 void get_brute_force(password* pwd){
-	int length = rand()%5 + 3; 	// 3,4,5,6,7
+	int length = rand()%5 + 2; 	// 2,3,4,5,6
 	pwd->length = length;
 	size_t i;
 	for (i = 0; i < length; i++)
