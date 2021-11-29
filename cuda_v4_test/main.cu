@@ -141,9 +141,9 @@ int main(int argc, char **argv){
         char *test = NULL;
         uint8_t int_test[16];
         
-	    // size_t len = 0;
-	    // int read_len = 0;
-        // read_len = getline(&test, &len, testfile);
+	    size_t len = 0;
+	    int read_len = 0;
+        read_len = getline(&test, &len, testfile);
 
         hashToUint8(test,int_test);
 
