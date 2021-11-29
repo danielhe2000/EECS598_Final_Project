@@ -1,0 +1,17 @@
+Total Dictionary Words: 10000
+File read time: 0.002695 s
+Device Allocation time: 0.001278 s
+Dictionary Calculation Time: 0.003939 s
+Couldn't find the password with dictionary manipulation
+max length of brute force: 13
+total possibilities: 2580398988131886038
+total cycles: 307607530133
+
+!!!!BF PASSWORD FOUND!!!!
+Password is: zzyzz
+MD5 Calculation time: 0.009904 s
+Total Time: 0.014185 s
+
+real	0m0.232s
+user	0m0.033s
+sys	0m0.173s
