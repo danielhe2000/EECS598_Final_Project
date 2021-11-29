@@ -39,14 +39,13 @@ __global__ void mutate_and_check(uint *dict, unsigned int numwords, int mutation
     __shared__ uint s_data[PWDSLENGTH]; // 512 * 17
     // 512 threads in one block, each thread handle a pwd with 64B pwd_t and 4B padding 
     int tid = threadIdx.x;
-    int offset = 16*blockDim.x * blockIdx.x;
     // First, try to copy the password from memory 
 
     // load from global to shared memory
     for (int i = 0; i < 16; ++i) {
         int index = tid + i * BLOCKTHREADS;
         int s_index = index + index/16; // padding one word every 16 words
-        s_data[s_index] = dict[index + offset]; // each thread load 16 times
+        s_data[s_index] = dict[index + 16*blockDim.x * blockIdx.x]; // each thread load 16 times
     }
     __syncthreads();
 
@@ -59,8 +58,6 @@ __global__ void mutate_and_check(uint *dict, unsigned int numwords, int mutation
         pwd[i] = s_data[i + tid * 17];
     }
 
-    // if (new_pas.word[0] == 'n') printf("special %s\n", new_pas.word);
-    // if (mutation_method == 0) printf("word: %s\n", new_pas.word);
     // Then, try to mutate the input password 
     if (mutation_method==0){
         /* First letter uppercase */

@@ -179,6 +179,7 @@ int main(int argc, char **argv) {
     for ( i = 0; i < required_size; i++)
     {
         password *cur = (password*)malloc(sizeof(password));
+        memset(cur, 0, sizeof(password));
         if(rand()%10 < 7){
             get_mutate(cur, pwd, numPwd);
         }

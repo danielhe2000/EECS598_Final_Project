@@ -41,6 +41,7 @@ __global__ void mutate_and_check(password *dict, unsigned int numwords, int muta
 
     // First, try to copy the password from memory
     password new_pas;
+    memset(&new_pas, 0, sizeof(password));
     new_pas.length = dict[index].length;
     for(int i = 0; i < new_pas.length; ++i){
         new_pas.word[i] = dict[index].word[i];
@@ -94,7 +95,6 @@ __global__ void mutate_and_check(password *dict, unsigned int numwords, int muta
         }
         new_pas.length = len + seq[mutation_method-232].length;
     }
-
     word16 md5_hash;
     md5(&new_pas, (uint8_t*)md5_hash.word);
     int flag = 1;
