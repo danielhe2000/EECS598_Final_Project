@@ -1,0 +1,14 @@
+Total Dictionary Words: 10000
+File read time: 0.051885 s
+Device Allocation time: 0.000666 s
+Dictionary Calculation Time: 0.003421 s
+Couldn't find the password with dictionary manipulation
+
+!!!!BF PASSWORD FOUND!!!!
+Password is: zzyzz
+MD5 Calculation time: 0.009719 s
+Total Time: 0.063172 s
+
+real	0m0.382s
+user	0m0.038s
+sys	0m0.163s
